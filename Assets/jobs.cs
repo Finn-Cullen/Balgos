@@ -70,7 +70,7 @@ public struct spreadJob : IJobParallelFor
 
         writer.EndForEachIndex();
     }
-
+ 
     void checkNeighbours(int neighborIndex, int nodeIND){
         bool indCHK = neighborIndex > 0 && neighborIndex < NodeArr.Length;
         bool valCHK = false;
