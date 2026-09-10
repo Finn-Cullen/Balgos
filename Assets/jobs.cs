@@ -9,27 +9,49 @@ using Unity.Mathematics;
 // stores jobs
 
 [BurstCompile]
-public struct assign_pos_job : IJobParallelFor
+public struct MediumAssignmentJob : IJobParallelFor
 {
     public NativeArray<mat_vals> NodeArr;
-    public NativeArray<float2> pos;
+    public NativeList<int> PosArr;
+    [ReadOnly] public Collider2D[] col;
     [ReadOnly] public int width;
-    [ReadOnly] public float spacing; 
-    [ReadOnly] public mat_vals mv;
+    [ReadOnly] public float spacing;
+    [ReadOnly] public mat_vals medium_val;
+    [ReadOnly] public mat_vals base_val;
 
     public void Execute(int index)
     {
+        int ind = PosArr[index];
+        bool matCHK = NodeArr[ind].decay == base_val.decay;
+        matCHK = matCHK || NodeArr[ind].decay == medium_val.decay;
+        // checks that we are not overwriting other mediums
+
         float widthloc = width/spacing;
         
-        float posx = (index%width)*spacing;
-        float posy = (float)((int)index/(int)width)*spacing;
+        bool colCHK = false;
+        if(col[0] != null){
+            float posx = (ind%width)*spacing;
+            float posy = (float)((int)ind/(int)width)*spacing;
+            float2 tr = new float2(posx,posy);
+            // converts index to world position
 
-        pos[index] = new float2(posx,posy);
+            foreach(Collider2D c in col){
+                if(c.OverlapPoint(tr)){
+                    colCHK = true;
+                    break;
+                }
+            }
+        }
+        // checks we are inside the bounds of the collider
 
-        // assigns position
-        NodeArr[index] = mv;
-        // assigns base air vals
-
+        if(matCHK && colCHK){
+            NodeArr[index] = medium_val;
+            // assigns mat vals
+        }
+        else{
+            PosArr.RemoveAt(index);
+            // culls list of nodes that are not updated
+        }
     }
 }
 
@@ -43,7 +65,6 @@ public struct spreadJob : IJobParallelFor
     [ReadOnly] public int frame;
 
     public NativeStream.Writer writer;
-    //public NativeList<int> newSpread;
 
     public void Execute(int index){
         writer.BeginForEachIndex(index);

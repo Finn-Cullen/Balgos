@@ -13,14 +13,7 @@ public struct noise_grid{
 
     // each array val is a node, each node represents the noise at a point in space
 
-    // public NativeArray<float> decibels; // how loud the node is      
-    // public NativeArray<float> decayRate; // rate at which nodes lose decibels per frame
-    // public NativeArray<float> spreadRate; // how fast the noise spreads to nearby nodes
-    // public NativeArray<float> spreadPerc; // how much of the decibels spread per spread
-    // public NativeArray<float> spreadExclusive; // used for intermedium transmission
-
     public NativeArray<mat_vals> Nodes; // holds all the node values
-    public NativeArray<float2> worldPositions; // position of the node
         
     public NativeList<int> activeNodes; // nodes that currently have noise
  
@@ -33,32 +26,30 @@ public struct noise_grid{
         spacing = (1/res)/100;
         int nodeCount = (int)((width/spacing)*(height/spacing));
         Nodes = new NativeArray<mat_vals>(nodeCount, Allocator.Persistent);
-        worldPositions = new NativeArray<float2>(nodeCount, Allocator.Persistent);
         // sets array lengths
 
         activeNodes = new NativeList<int>(Allocator.Persistent);
 
-        // threading stops abominable lag
-        var job = new assign_pos_job
-        {
-            pos = worldPositions,
-            NodeArr = Nodes,
-            width = Mathf.RoundToInt(width/spacing),
-            spacing = spacing,
-            mv = air
-        };
 
-        JobHandle handle = job.Schedule(worldPositions.Length, 512);
-        handle.Complete();
+
+        var jobAssign = new MediumAssignmentJob
+        {
+            NodeArr = Nodes,
+            PosArr = get_nodes_grid(new float2(width/2,height/2),width,height),
+            col = null,
+            width = width,
+            spacing = spacing,
+            medium_val = air,
+            base_val = air,
+        };
+        JobHandle handleAssign = jobAssign.Schedule(Nodes.Length, 128);
 
         Debug.Log("graph complete!");
-        Debug.Log(worldPositions.Length);
     }
 
     public void remove_grid(){
         // clears array
         if (Nodes.IsCreated) Nodes.Dispose();
-        if (worldPositions.IsCreated) worldPositions.Dispose();
     } 
 
     public void updateMap(int frame){
