@@ -36,3 +36,9 @@ public struct NodeUpdate
     public int index;
     public float value;
 }
+public struct MediumUpdate
+{
+    // used in jobs to write node values in bulk
+    public int index;
+    public mat_vals value;
+}
