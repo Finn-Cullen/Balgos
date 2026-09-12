@@ -26,23 +26,6 @@ public class mesh_manager : MonoBehaviour
     NativeArray<Color32> soundColors;
 
     public void Awake(){
-        // preloads call
-        // NativeArray<mat_vals> a = new NativeArray<mat_vals>(1, Allocator.TempJob);
-        // NativeArray<float2> d = new NativeArray<float2>(1, Allocator.TempJob);
-        // var job = new assign_pos_job
-        // {
-        //     NodeArr = a,
-        //     pos = d,
-        //     width = 1,
-        //     spacing = 1,
-        //     mv = air,
-        // };
-        
-        // JobHandle handle = job.Schedule(1, 4);
-        // handle.Complete();
-        
-        // a.Dispose();
-        // d.Dispose();
 
         soundColors = new NativeArray<Color32>(Mathf.RoundToInt((s.width*s.resolution)*(s.height*s.resolution)), Allocator.Persistent);
         soundmap = new Texture2D(Mathf.RoundToInt(s.width*s.resolution),Mathf.RoundToInt(s.height*s.resolution), TextureFormat.RGBA32, false);
