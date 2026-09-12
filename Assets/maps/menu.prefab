@@ -3417,7 +3417,6 @@ TilemapCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 431185301275834598}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -3441,8 +3440,7 @@ TilemapCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
@@ -3492,6 +3490,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 0
     spreadExclusive: 0
+  width: 0
+  height: 0
 --- !u!1 &2395054710733075993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,6 +3596,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &3488026279627523216
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3604,7 +3606,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2395054710733075993}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -3628,8 +3629,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -3911,6 +3911,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &7136805896609130150
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3919,7 +3921,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2572048189016455190}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -3943,8 +3944,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -4174,6 +4174,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &7972857837100359448
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4182,7 +4184,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2890749081331599052}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -4206,8 +4207,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -5027,9 +5027,9 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
-      m_TileColorIndex: 2
+      m_TileColorIndex: 1
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741827
@@ -5037,9 +5037,9 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
-      m_TileColorIndex: 2
+      m_TileColorIndex: 1
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741827
@@ -5067,9 +5067,9 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
-      m_TileColorIndex: 2
+      m_TileColorIndex: 1
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741827
@@ -5172,9 +5172,9 @@ Tilemap:
   m_TileSpriteArray:
   - m_RefCount: 22
     m_Data: {fileID: 1273358426504498224, guid: fc067bb00be5cfa448d76cf72df31933, type: 3}
-  - m_RefCount: 3
-    m_Data: {fileID: 0}
   - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 3
     m_Data: {fileID: 0}
   m_TileMatrixArray:
   - m_RefCount: 25
@@ -5198,10 +5198,10 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 22
     m_Data: {r: 1, g: 1, b: 1, a: 1}
-  - m_RefCount: 0
-    m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   - m_RefCount: 3
-    m_Data: {r: 0.7893127, g: 0.5294232, b: 0.59092194, a: 1}
+    m_Data: {r: 0.96155596, g: 0.46660838, b: 0.58116406, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 4.7759e-41, g: 4.7759e-41, b: 4.7759e-41, a: 4.7759e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5320,7 +5320,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3306302013768669803}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -5344,8 +5343,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -5495,7 +5493,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4243972232944381647}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -5519,8 +5516,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -5678,14 +5674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d72c9f5cadea24a88be079a5e2022b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  medium_val:
-    decibels: 0
-    decay: 2
-    spreadRate: 1
-    spreadPerc: 0.1
-    spreadExclusive: 1
-  width: 3
-  height: 5
 --- !u!1 &4282425579595586984
 GameObject:
   m_ObjectHideFlags: 0
@@ -5790,6 +5778,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &6290872923212605806
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -5798,7 +5788,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4282425579595586984}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -5822,8 +5811,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -6355,6 +6343,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &9215518279294040448
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6363,7 +6353,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5049179259125407474}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -6387,8 +6376,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -6739,6 +6727,8 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 1
     spreadExclusive: 0.4
+  width: 0
+  height: 0
 --- !u!60 &2104247589604295866
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6747,7 +6737,6 @@ PolygonCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6574711667364377467}
   m_Enabled: 1
-  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -6771,8 +6760,7 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
