@@ -14,6 +14,7 @@ public struct noise_grid{
     // each array val is a node, each node represents the noise at a point in space
 
     public NativeArray<mat_vals> Nodes; // holds all the node values
+    public NativeArray<float2> worldPositions;
         
     public NativeList<int> activeNodes; // nodes that currently have noise
  
@@ -26,23 +27,21 @@ public struct noise_grid{
         spacing = (1/res)/100;
         int nodeCount = (int)((width/spacing)*(height/spacing));
         Nodes = new NativeArray<mat_vals>(nodeCount, Allocator.Persistent);
+        worldPositions = new NativeArray<float2>(nodeCount, Allocator.Persistent);
         // sets array lengths
 
-        activeNodes = new NativeList<int>(Allocator.Persistent);
-
-
-
-        var jobAssign = new MediumAssignmentJob
+        var jobInit = new InitGridJob
         {
             NodeArr = Nodes,
-            PosArr = get_nodes_grid(new float2(width/2,height/2),width,height),
-            col = null,
-            width = width,
+            PosArr = worldPositions,
+            width = Mathf.RoundToInt(width/spacing),
             spacing = spacing,
             medium_val = air,
-            base_val = air,
         };
-        JobHandle handleAssign = jobAssign.Schedule(Nodes.Length, 128);
+        JobHandle handleInit = jobInit.Schedule(nodeCount, 512);
+        handleInit.Complete();
+
+        activeNodes = new NativeList<int>(Allocator.Persistent);
 
         Debug.Log("graph complete!");
     }
@@ -50,6 +49,7 @@ public struct noise_grid{
     public void remove_grid(){
         // clears array
         if (Nodes.IsCreated) Nodes.Dispose();
+        if (worldPositions.IsCreated) worldPositions.Dispose();
     } 
 
     public void updateMap(int frame){
@@ -143,7 +143,6 @@ public struct noise_grid{
         // rounds position to grid
 
         NativeList<int> gridpositions = new NativeList<int>(Allocator.Persistent);
-
         for(int i = 0; i < widthloc*heightloc; i++){
             int pos = Mathf.RoundToInt(i % widthloc + ((width/spacing) * Mathf.RoundToInt(i / widthloc)));
             pos += startindex;
