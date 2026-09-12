@@ -9,48 +9,94 @@ using Unity.Mathematics;
 // stores jobs
 
 [BurstCompile]
-public struct MediumAssignmentJob : IJobParallelFor
+public struct InitGridJob : IJobParallelFor
 {
     public NativeArray<mat_vals> NodeArr;
-    public NativeList<int> PosArr;
-    [ReadOnly] public Collider2D[] col;
+    public NativeArray<float2> PosArr;
     [ReadOnly] public int width;
     [ReadOnly] public float spacing;
     [ReadOnly] public mat_vals medium_val;
-    [ReadOnly] public mat_vals base_val;
 
     public void Execute(int index)
     {
-        int ind = PosArr[index];
+        float posx = (index%width)*spacing;
+        float posy = (float)((int)index/(int)width)*spacing;
+        float2 tr = new float2(posx,posy);
+        PosArr[index] = tr;
+        // converts index to world position
+
+        NodeArr[index] = medium_val;
+        // assigns mat vals
+    }
+}
+
+[BurstCompile]
+public struct MediumCheckJob : IJobParallelFor
+{
+    public NativeStream.Writer writer;
+    
+    [ReadOnly] public NativeArray<mat_vals> NodeArr;
+    [ReadOnly] public NativeList<float2> PosArr;
+    [ReadOnly] public float2 pos;
+    
+    [ReadOnly] public mat_vals medium_val;
+    [ReadOnly] public mat_vals base_val;
+    [ReadOnly] public float width, spacing;
+
+    public void Execute(int index)
+    {
+        int ind = PTI(PosArr[index]);
         bool matCHK = NodeArr[ind].decay == base_val.decay;
         matCHK = matCHK || NodeArr[ind].decay == medium_val.decay;
         // checks that we are not overwriting other mediums
+        writer.BeginForEachIndex(index);
+        if(matCHK){
+            writer.Write(new MediumUpdate {index = ind,value = medium_val});
+            // write mat val
+        }
 
-        float widthloc = width/spacing;
-        
-        bool colCHK = false;
-        if(col[0] != null){
-            float posx = (ind%width)*spacing;
-            float posy = (float)((int)ind/(int)width)*spacing;
-            float2 tr = new float2(posx,posy);
-            // converts index to world position
+        writer.EndForEachIndex();
+    }
 
-            foreach(Collider2D c in col){
-                if(c.OverlapPoint(tr)){
-                    colCHK = true;
-                    break;
-                }
+    public int PTI(Vector2 pos){
+        // takes a world position and returns the closest node
+        float remx = pos.x % spacing;
+        float addx = 0;
+        if(remx >= spacing/2){
+            addx = spacing;
+        }
+        float remy = pos.y % spacing;
+        float addy = 0;
+        if(remy >= spacing/2){
+            addy = spacing;
+        }
+        // rounds pos values to grid
+        remx = pos.x - (pos.x%spacing) + addx;
+        remy = pos.y - (pos.y%spacing) + addy;
+        return Mathf.RoundToInt(((remx/spacing)+((remy/spacing)*(width/spacing))));
+    }
+}
+
+[BurstCompile]
+public struct MediumAssignJob : IJob
+{
+    public NativeArray<mat_vals> NodeArr;
+    public NativeStream.Reader reader;
+    public int foreachCount;
+
+    public void Execute()
+    {
+        for (int i = 0; i < foreachCount; i++)
+        {
+            int count = reader.BeginForEachIndex(i);
+            for (int j = 0; j < count; j++)
+            {
+                MediumUpdate update = reader.Read<MediumUpdate>();
+                mat_vals t = NodeArr[update.index];
+                t = update.value;
+                NodeArr[update.index] = t;
             }
-        }
-        // checks we are inside the bounds of the collider
-
-        if(matCHK && colCHK){
-            NodeArr[index] = medium_val;
-            // assigns mat vals
-        }
-        else{
-            PosArr.RemoveAt(index);
-            // culls list of nodes that are not updated
+            reader.EndForEachIndex();
         }
     }
 }
