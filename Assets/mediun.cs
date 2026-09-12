@@ -12,7 +12,7 @@ public class mediun : MonoBehaviour
 
     Collider2D col;
     NativeList<float2> shadow;
-    NativeList<int> act_nodes;
+    NativeList<int> ActPos;
     mesh_manager mesh;
 
     public float width, height;
@@ -23,13 +23,21 @@ public class mediun : MonoBehaviour
         shadow = new NativeList<float2>(Allocator.Persistent);
         createShadow();
         updateNodeVal();
-        
     }
 
-    public void updateNodeVal(){
+    public void StepNodeVal(){
+        // used to update mediuns position.
+        // resets prior call of updateNodeVal and then calls another
+        resetNodeVal();
+        updateNodeVal();
+    }
+
+    void updateNodeVal(){
         var stream = new NativeStream(shadow.Length, Allocator.TempJob);
 
-        var jobAssign = new MediumCheckJob
+        NativeList<int> SavPos = new NativeList<int>(Allocator.Persistent);
+
+        var jobCheck = new MediumCheckJob
         {
             NodeArr = mesh.grid.Nodes,
             writer = stream.AsWriter(),
@@ -40,31 +48,46 @@ public class mediun : MonoBehaviour
             width = mesh.grid.width,
             spacing = mesh.grid.spacing,
         };
-        JobHandle handleCheck = jobAssign.Schedule(shadow.Length, 128);
+        JobHandle handleCheck = jobCheck.Schedule(shadow.Length, 128);
 
-        var jobmerge = new MediumAssignJob
+        var jobAssign = new MediumAssignJob
         {
             reader = stream.AsReader(),
             NodeArr = mesh.grid.Nodes,
+            Sav = SavPos,
             foreachCount = shadow.Length,
         };
-        JobHandle handleAssign = jobmerge.Schedule(handleCheck); 
+        JobHandle handleAssign = jobAssign.Schedule(handleCheck); 
+        
         handleAssign.Complete();
+        stream.Dispose();
+        ActPos = SavPos;
     }
 
-    public void resetNodeVal(){
-        // undoes prior work on Noise Map
-        foreach(int i in act_nodes){
-            // loops through all nodes as it is a tilemap
-            bool matCHK = mesh.grid.Nodes[i].decay == mesh.air.decay;
-            matCHK = matCHK || mesh.grid.Nodes[i].decay == medium_val.decay;
-            if(i > 0 && matCHK){
-                mat_vals temp = mesh.grid.Nodes[i];
-                float v = temp.decibels;
-                temp = mesh.air;
-                temp.decibels = v;
-                mesh.grid.Nodes[i] = temp;
-            }
+    void resetNodeVal(){
+        if(ActPos.IsCreated){
+            var stream = new NativeStream(ActPos.Length, Allocator.TempJob);
+            var jobReset = new MediumResetJob
+            {
+                writer = stream.AsWriter(),
+                NodeArr = mesh.grid.Nodes,
+                listPos = ActPos,
+                medium_val = medium_val,
+                base_val = mesh.air,
+            };
+            JobHandle handleReset = jobReset.Schedule(ActPos.Length, 128);
+
+            var jobAssign = new MediumAssignJob
+            {
+                reader = stream.AsReader(),
+                NodeArr = mesh.grid.Nodes,
+                Sav = ActPos,
+                foreachCount = shadow.Length,
+            };
+            JobHandle handleAssign = jobAssign.Schedule(handleReset); 
+            handleAssign.Complete();
+            ActPos.Dispose();
+            stream.Dispose();
         }
     }
 
@@ -78,7 +101,7 @@ public class mediun : MonoBehaviour
         }
         foreach(int i in listPos){
             if(col.OverlapPoint(mesh.grid.worldPositions[i])){
-                float2 tr = mesh.grid.worldPositions[i]; // (float2)(Vector2)transform.position
+                float2 tr = (float2)(Vector2)transform.position - mesh.grid.worldPositions[i];
                 shadow.Add(tr);
             }
         }
