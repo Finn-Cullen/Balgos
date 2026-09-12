@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Collections;
 using Unity.Jobs;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Mathematics;
 
 public class mediun : MonoBehaviour
 {
     public mat_vals medium_val;
 
-    Collider2D[] cols;
+    Collider2D col;
+    NativeList<float2> shadow;
     NativeList<int> act_nodes;
     mesh_manager mesh;
 
@@ -16,31 +19,37 @@ public class mediun : MonoBehaviour
 
     public void Start(){
         mesh = FindObjectsByType<mesh_manager>(FindObjectsSortMode.None)[0];
-        cols = GetComponentsInChildren<Collider2D>();
-
+        col = GetComponentInChildren<Collider2D>();
+        shadow = new NativeList<float2>(Allocator.Persistent);
+        createShadow();
         updateNodeVal();
+        
     }
 
     public void updateNodeVal(){
-        // updates noise map with medium values
-        NativeList<int> savnode = mesh.grid.get_nodes_grid(transform.position,width,height);
+        var stream = new NativeStream(shadow.Length, Allocator.TempJob);
 
-        var jobAssign = new MediumAssignmentJob
+        var jobAssign = new MediumCheckJob
         {
             NodeArr = mesh.grid.Nodes,
-            PosArr = savnode,
-            col = cols,
-            width = mesh.grid.width,
-            spacing = mesh.grid.spacing,
+            writer = stream.AsWriter(),
+            PosArr = shadow,
+            pos = (float2)(Vector2)transform.position,
             medium_val = medium_val,
             base_val = mesh.air,
+            width = mesh.grid.width,
+            spacing = mesh.grid.spacing,
         };
-        JobHandle handleAssign = jobAssign.Schedule(savnode.Length, 128);
+        JobHandle handleCheck = jobAssign.Schedule(shadow.Length, 128);
 
+        var jobmerge = new MediumAssignJob
+        {
+            reader = stream.AsReader(),
+            NodeArr = mesh.grid.Nodes,
+            foreachCount = shadow.Length,
+        };
+        JobHandle handleAssign = jobmerge.Schedule(handleCheck); 
         handleAssign.Complete();
-
-        act_nodes.Dispose();
-        act_nodes = savnode;
     }
 
     public void resetNodeVal(){
@@ -57,5 +66,23 @@ public class mediun : MonoBehaviour
                 mesh.grid.Nodes[i] = temp;
             }
         }
+    }
+
+    public void createShadow(){
+        NativeList<int> listPos;
+        if(width > 0){
+            listPos = mesh.grid.get_nodes_grid(transform.position,width,height);
+        }
+        else{
+            listPos = mesh.grid.get_nodes_grid(mesh.transform.position,mesh.grid.width,mesh.grid.height);
+        }
+        foreach(int i in listPos){
+            if(col.OverlapPoint(mesh.grid.worldPositions[i])){
+                float2 tr = mesh.grid.worldPositions[i]; // (float2)(Vector2)transform.position
+                shadow.Add(tr);
+            }
+        }
+
+        listPos.Dispose();
     }
 }
