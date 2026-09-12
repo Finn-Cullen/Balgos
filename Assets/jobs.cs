@@ -45,7 +45,7 @@ public struct MediumCheckJob : IJobParallelFor
 
     public void Execute(int index)
     {
-        int ind = PTI(PosArr[index]);
+        int ind = PTI(pos + PosArr[index]);
         bool matCHK = NodeArr[ind].decay == base_val.decay;
         matCHK = matCHK || NodeArr[ind].decay == medium_val.decay;
         // checks that we are not overwriting other mediums
@@ -78,10 +78,37 @@ public struct MediumCheckJob : IJobParallelFor
 }
 
 [BurstCompile]
+public struct MediumResetJob : IJobParallelFor
+{
+    public NativeStream.Writer writer;
+    
+    [ReadOnly] public NativeArray<mat_vals> NodeArr;
+    [ReadOnly] public NativeList<int> listPos;
+    
+    [ReadOnly] public mat_vals medium_val;
+    [ReadOnly] public mat_vals base_val;
+
+    public void Execute(int index)
+    {
+        int ind = listPos[index];
+        bool matCHK = NodeArr[ind].decay == medium_val.decay;
+        // checks that the node at ind is our medium
+        writer.BeginForEachIndex(index);
+        if(matCHK){
+            writer.Write(new MediumUpdate {index = ind,value = base_val});
+            // write mat val
+        }
+
+        writer.EndForEachIndex();
+    }
+}
+
+[BurstCompile]
 public struct MediumAssignJob : IJob
 {
     public NativeArray<mat_vals> NodeArr;
     public NativeStream.Reader reader;
+    public NativeList<int> Sav;
     public int foreachCount;
 
     public void Execute()
@@ -93,8 +120,12 @@ public struct MediumAssignJob : IJob
             {
                 MediumUpdate update = reader.Read<MediumUpdate>();
                 mat_vals t = NodeArr[update.index];
+                float s = t.decibels;
                 t = update.value;
+                t.decibels = s;
                 NodeArr[update.index] = t;
+                
+                Sav.Add(update.index);
             }
             reader.EndForEachIndex();
         }
