@@ -37,12 +37,17 @@ public class mediun : MonoBehaviour
 
         NativeList<int> SavPos = new NativeList<int>(Allocator.Persistent);
 
+        float2x2 rotation = float2x2.Rotate(math.radians(transform.eulerAngles.z-180));
+        // due to how shadow is generated its technically upside down
+        // subtracting 180 garuntees rotation flips it right side up
+
         var jobCheck = new MediumCheckJob
         {
             NodeArr = mesh.grid.Nodes,
             writer = stream.AsWriter(),
             PosArr = shadow,
             pos = (float2)(Vector2)transform.position,
+            rot = rotation,
             medium_val = medium_val,
             base_val = mesh.air,
             width = mesh.grid.width,
@@ -97,7 +102,8 @@ public class mediun : MonoBehaviour
             listPos = mesh.grid.get_nodes_grid(transform.position,width,height);
         }
         else{
-            listPos = mesh.grid.get_nodes_grid(mesh.transform.position,mesh.grid.width,mesh.grid.height);
+            Vector2 pos = mesh.transform.position + new Vector3(mesh.grid.width/2,mesh.grid.height/2,0);
+            listPos = mesh.grid.get_nodes_grid(pos,mesh.grid.width,mesh.grid.height);
         }
         foreach(int i in listPos){
             if(col.OverlapPoint(mesh.grid.worldPositions[i])){
