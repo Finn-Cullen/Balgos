@@ -38,6 +38,7 @@ public struct MediumCheckJob : IJobParallelFor
     [ReadOnly] public NativeArray<mat_vals> NodeArr;
     [ReadOnly] public NativeList<float2> PosArr;
     [ReadOnly] public float2 pos;
+    [ReadOnly] public float2x2 rot;
     
     [ReadOnly] public mat_vals medium_val;
     [ReadOnly] public mat_vals base_val;
@@ -45,17 +46,19 @@ public struct MediumCheckJob : IJobParallelFor
 
     public void Execute(int index)
     {
-        int ind = PTI(pos + PosArr[index]);
-        bool matCHK = NodeArr[ind].decay == base_val.decay;
-        matCHK = matCHK || NodeArr[ind].decay == medium_val.decay;
-        // checks that we are not overwriting other mediums
-        writer.BeginForEachIndex(index);
-        if(matCHK){
-            writer.Write(new MediumUpdate {index = ind,value = medium_val});
-            // write mat val
-        }
+        int ind = PTI(pos + (math.mul(rot, PosArr[index])));
+        if(ind > 0 && ind < NodeArr.Length){
+            bool matCHK = NodeArr[ind].decay == base_val.decay;
+            matCHK = matCHK || NodeArr[ind].decay == medium_val.decay;
+            // checks that we are not overwriting other mediums
+            writer.BeginForEachIndex(index);
+            if(matCHK){
+                writer.Write(new MediumUpdate {index = ind,value = medium_val});
+                // write mat val
+            }
 
-        writer.EndForEachIndex();
+            writer.EndForEachIndex();
+        }
     }
 
     public int PTI(Vector2 pos){
@@ -91,15 +94,17 @@ public struct MediumResetJob : IJobParallelFor
     public void Execute(int index)
     {
         int ind = listPos[index];
-        bool matCHK = NodeArr[ind].decay == medium_val.decay;
-        // checks that the node at ind is our medium
-        writer.BeginForEachIndex(index);
-        if(matCHK){
-            writer.Write(new MediumUpdate {index = ind,value = base_val});
-            // write mat val
-        }
+        if(ind > 0 && ind < NodeArr.Length){
+            bool matCHK = NodeArr[ind].decay == medium_val.decay;
+            // checks that the node at ind is our medium
+            writer.BeginForEachIndex(index);
+            if(matCHK && ind > 0 && ind < NodeArr.Length){
+                writer.Write(new MediumUpdate {index = ind,value = base_val});
+                // write mat val
+            }
 
-        writer.EndForEachIndex();
+            writer.EndForEachIndex();
+        }
     }
 }
 
