@@ -146,6 +146,7 @@ public struct noise_grid{
         for(int i = 0; i < widthloc*heightloc; i++){
             int pos = Mathf.RoundToInt(i % widthloc + ((width/spacing) * Mathf.RoundToInt(i / widthloc)));
             pos += startindex;
+            pos = Mathf.RoundToInt(Mathf.Clamp(pos,0,Nodes.Length));
             gridpositions.Add(pos);
         }
 
