@@ -19,7 +19,7 @@ public class mediun : MonoBehaviour
 
     public void Start(){
         mesh = FindObjectsByType<mesh_manager>(FindObjectsSortMode.None)[0];
-        col = GetComponentInChildren<Collider2D>();
+        col = GetComponent<Collider2D>();
         shadow = new NativeList<float2>(Allocator.Persistent);
         createShadow();
         updateNodeVal();
@@ -53,7 +53,7 @@ public class mediun : MonoBehaviour
             width = mesh.grid.width,
             spacing = mesh.grid.spacing,
         };
-        JobHandle handleCheck = jobCheck.Schedule(shadow.Length, 128);
+        JobHandle handleCheck = jobCheck.Schedule(shadow.Length, 512);
 
         var jobAssign = new MediumAssignJob
         {
@@ -80,14 +80,14 @@ public class mediun : MonoBehaviour
                 medium_val = medium_val,
                 base_val = mesh.air,
             };
-            JobHandle handleReset = jobReset.Schedule(ActPos.Length, 128);
+            JobHandle handleReset = jobReset.Schedule(ActPos.Length, 512);
 
             var jobAssign = new MediumAssignJob
             {
                 reader = stream.AsReader(),
                 NodeArr = mesh.grid.Nodes,
                 Sav = ActPos,
-                foreachCount = shadow.Length,
+                foreachCount = ActPos.Length,
             };
             JobHandle handleAssign = jobAssign.Schedule(handleReset); 
             handleAssign.Complete();
@@ -106,7 +106,7 @@ public class mediun : MonoBehaviour
             listPos = mesh.grid.get_nodes_grid(pos,mesh.grid.width,mesh.grid.height);
         }
         foreach(int i in listPos){
-            if(col.OverlapPoint(mesh.grid.worldPositions[i])){
+            if(i < mesh.grid.worldPositions.Length && col.OverlapPoint(mesh.grid.worldPositions[i])){
                 float2 tr = (float2)(Vector2)transform.position - mesh.grid.worldPositions[i];
                 shadow.Add(tr);
             }
