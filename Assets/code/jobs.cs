@@ -20,7 +20,7 @@ public struct InitGridJob : IJobParallelFor
     public void Execute(int index)
     {
         float posx = (index%width)*spacing;
-        float posy = (float)((int)index/(int)width)*spacing;
+        float posy = (index/width)*spacing;
         float2 tr = new float2(posx,posy);
         PosArr[index] = tr;
         // converts index to world position

@@ -26,9 +26,8 @@ public class mesh_manager : MonoBehaviour
     NativeArray<Color32> soundColors;
 
     public void Awake(){
-
-        soundColors = new NativeArray<Color32>(Mathf.RoundToInt((s.width*s.resolution)*(s.height*s.resolution)), Allocator.Persistent);
-        soundmap = new Texture2D(Mathf.RoundToInt(s.width*s.resolution),Mathf.RoundToInt(s.height*s.resolution), TextureFormat.RGBA32, false);
+        soundColors = new NativeArray<Color32>(Mathf.RoundToInt((s.width/s.resolution)*(s.height/s.resolution)), Allocator.Persistent);
+        soundmap = new Texture2D(Mathf.RoundToInt(s.width/s.resolution),Mathf.RoundToInt(s.height/s.resolution), TextureFormat.RGBA32, false);
         soundmap.wrapMode = TextureWrapMode.Clamp;
         soundmap.filterMode = FilterMode.Point;
         
@@ -65,7 +64,7 @@ public class mesh_manager : MonoBehaviour
             colors = soundColors,
 
             gridwidth = Mathf.RoundToInt(grid.width/grid.spacing),
-            colourwidth = Mathf.RoundToInt(s.width*s.resolution),
+            colourwidth = Mathf.RoundToInt(s.width/s.resolution),
             spacing = grid.spacing,
             initpos = soundrenderer.transform.position,
         };
@@ -80,7 +79,7 @@ public class mesh_manager : MonoBehaviour
     {
         Sprite sprite = Sprite.Create(
             soundmap,
-            new Rect(0, 0, (s.width*s.resolution), (s.height*s.resolution)), // size in pixels
+            new Rect(0, 0, (s.width/s.resolution), (s.height/s.resolution)), // size in pixels
             new Vector2(0f, 0f), // pivot
             pixelsPerUnit: 100
         );
