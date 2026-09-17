@@ -39,7 +39,8 @@ public class mesh_manager : MonoBehaviour
     }
 
     public void Update(){
-        if(Time.time > refrate){
+        if(Time.time > refrate){ // really expensive, rendering costs MASSIVE
+            // act nodes contribute heavily to rendering costs 
             // refreshes the screen
             refrate = Time.time + refreshrate;
             grid.updateMap(frame);
@@ -69,7 +70,7 @@ public class mesh_manager : MonoBehaviour
             initpos = soundrenderer.transform.position,
         };
 
-        job.Schedule(soundColors.Length, 128).Complete();
+        job.Schedule(soundColors.Length, 512).Complete();
         soundmap.SetPixelData(soundColors, 0);
         soundmap.Apply(false, false);
         colseq.Dispose();
