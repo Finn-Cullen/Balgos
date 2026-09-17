@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3080978263282412505}
   - component: {fileID: 1054250674321617099}
-  - component: {fileID: 4028765989765301077}
   m_Layer: 0
   m_Name: gridser
   m_TagString: Untagged
@@ -140,43 +139,9 @@ MonoBehaviour:
     spreadRate: 1
     spreadPerc: 0.5
     spreadExclusive: 0.5
-  s: {fileID: 4028765989765301077}
-  debug: {x: 10, y: 7}
-  debugvala: 120
+  s: {fileID: 11400000, guid: 2930ce531f4b9784698da9750e5215a6, type: 2}
   refreshrate: 0.025
   soundrenderer: {fileID: 0}
---- !u!114 &4028765989765301077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2947375351754654193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d0ae0992c95e0f408fc26ce1fc26b1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  width: 1920
-  height: 1080
-  resolution: 0.1
-  coloursequence:
-  - col:
-      serializedVersion: 2
-      rgba: 4280096278
-    max: 10
-  - col:
-      serializedVersion: 2
-      rgba: 4282006074
-    max: 50
-  - col:
-      serializedVersion: 2
-      rgba: 4279835080
-    max: 90
-  - col:
-      serializedVersion: 2
-      rgba: 4294967295
-    max: 100
 --- !u!1 &7152622841926465785
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +384,8 @@ MonoBehaviour:
     spreadRate: 5
     spreadPerc: 0.5
     spreadExclusive: 0.5
+  width: 0
+  height: 0
 --- !u!1 &7279719730600234446
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,9 +728,9 @@ Tilemap:
   - m_RefCount: 22
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
-    m_Data: {r: 4.3499e-41, g: 4.3499e-41, b: 4.3499e-41, a: 4.3499e-41}
+    m_Data: {r: 4.5901e-41, g: 4.5901e-41, b: 4.5901e-41, a: 4.5901e-41}
   - m_RefCount: 3
-    m_Data: {r: 0.968674, g: 0.5328139, b: 0.6054125, a: 1}
+    m_Data: {r: 0.98250943, g: 0.6270718, b: 0.68211675, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
