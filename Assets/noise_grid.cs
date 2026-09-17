@@ -20,7 +20,7 @@ public struct noise_grid{
  
     public int width, height;
     public float spacing;
-    
+
     public void construct_grid(mat_vals air, float res){
         // produces new grid
         
