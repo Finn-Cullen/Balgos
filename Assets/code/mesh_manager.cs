@@ -13,9 +13,6 @@ public class mesh_manager : MonoBehaviour
     public mat_vals air;
     public setting_vals s;
 
-    public Vector2 debug;
-    public float debugvala;
-
     public float refreshrate;
     float refrate;
     int frame = 0;
@@ -37,7 +34,7 @@ public class mesh_manager : MonoBehaviour
         Debug.Log("starts");
     }
 
-    public void Update(){
+    public void FixedUpdate(){
         if(Time.time > refrate){ // really expensive, rendering costs MASSIVE
             // act nodes contribute heavily to rendering costs 
             // refreshes the screen
