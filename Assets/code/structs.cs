@@ -11,10 +11,16 @@ using Unity.Mathematics;
 [System.Serializable]
 public struct mat_vals{
     // values for assigning mediums
+
     public float decibels;
     // how loud the point is
+    public float minDecibelVal;
+    public float maxDecibelVal;
+    // defines the limit to decibels value
+
     public float decay;
     // how fast the noise decays to zero
+
     public float spreadRate;
     // how fast it spreads
     public float spreadPerc;
