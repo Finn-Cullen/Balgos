@@ -17,6 +17,10 @@ public struct InitGridJob : IJobParallelFor
     [ReadOnly] public float spacing;
     [ReadOnly] public mat_vals medium_val;
 
+    [ReadOnly] public float SPWidth;
+    [ReadOnly] public float GRWidth;
+    [ReadOnly] public float GRHeight;
+
     public void Execute(int index)
     {
         float posx = (index%width)*spacing;
@@ -24,9 +28,20 @@ public struct InitGridJob : IJobParallelFor
         float2 tr = new float2(posx,posy);
         PosArr[index] = tr;
         // converts index to world position
+        
+        float MinVal = 0;
+        float ind = (index % (SPWidth+GRWidth))+1;
+        if(ind < GRWidth){
+            MinVal = GRHeight * (ind/GRHeight);
+        }
 
-        NodeArr[index] = medium_val;
+        mat_vals m = medium_val;
+        m.minDecibelVal = MinVal;
+        m.decibels = MinVal;
+        NodeArr[index] = m;
         // assigns mat vals
+
+        // make background gradient
     }
 }
 
@@ -125,9 +140,11 @@ public struct MediumAssignJob : IJob
             {
                 MediumUpdate update = reader.Read<MediumUpdate>();
                 mat_vals t = NodeArr[update.index];
+                float m = t.minDecibelVal;
                 float s = t.decibels;
                 t = update.value;
                 t.decibels = s;
+                t.minDecibelVal = m;
                 NodeArr[update.index] = t;
                 
                 Sav.Add(update.index);
@@ -168,7 +185,7 @@ public struct spreadJob : IJobParallelFor
 
         // decays current node
         float decVAL = NodeArr[nodeIND].decibels - NodeArr[nodeIND].decay;
-        decVAL = Mathf.Clamp(decVAL,0,200);
+        decVAL = Mathf.Clamp(decVAL,NodeArr[nodeIND].minDecibelVal,NodeArr[nodeIND].maxDecibelVal);
         writer.Write(new NodeUpdate {index = nodeIND,value = decVAL});
 
         writer.EndForEachIndex();
@@ -224,12 +241,12 @@ public struct MergeSpreadJob : IJob
                 }
                 // updates decibels with new value
                 
-                if(update.value > 0f && !isActive[update.index]){ //  && !activeNodes.Contains(update.index)
+                if(update.value > t.minDecibelVal && !isActive[update.index]){
                     isActive[update.index] = true;
                     activeNodes.Add(update.index);
                     // outList holds all the valid index positions
                 }
-                else if(update.value < 0f && update.index < NodeArr.Length){
+                else if(update.value < t.minDecibelVal && update.index < NodeArr.Length){
                     t.decibels = 0;
                     // removes node
                 }
