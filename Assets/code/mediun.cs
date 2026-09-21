@@ -106,12 +106,13 @@ public class mediun : MonoBehaviour
             listPos = mesh.grid.get_nodes_grid(pos,mesh.grid.width,mesh.grid.height);
         }
         foreach(int i in listPos){
-            if(i < mesh.grid.worldPositions.Length && col.OverlapPoint(mesh.grid.worldPositions[i])){
-                float2 tr = (float2)(Vector2)transform.position - mesh.grid.worldPositions[i];
-                shadow.Add(tr);
+            if(i < mesh.grid.worldPositions.Length){
+                if(col == null || col.OverlapPoint(mesh.grid.worldPositions[i])){
+                    float2 tr = (float2)(Vector2)transform.position - mesh.grid.worldPositions[i];
+                    shadow.Add(tr);
+                }
             }
         }
-
         listPos.Dispose();
     }
 }
