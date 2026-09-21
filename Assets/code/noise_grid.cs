@@ -21,6 +21,10 @@ public struct noise_grid{
     public int width, height;
     public float spacing;
 
+    public float spacingWidth;
+    public float gradientWidth;
+    public float gradientHeight;
+
     public void construct_grid(mat_vals air, float res){
         // produces new grid
         
@@ -37,6 +41,9 @@ public struct noise_grid{
             width = Mathf.RoundToInt(width/spacing),
             spacing = spacing,
             medium_val = air,
+            SPWidth = spacingWidth,
+            GRWidth = gradientWidth,
+            GRHeight = gradientHeight,
         };
         JobHandle handleInit = jobInit.Schedule(nodeCount, 512);
         handleInit.Complete();
