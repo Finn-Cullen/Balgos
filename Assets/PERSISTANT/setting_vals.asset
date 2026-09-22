@@ -19,7 +19,7 @@ MonoBehaviour:
   - col:
       serializedVersion: 2
       rgba: 4280096278
-    max: 10
+    max: 0
   - col:
       serializedVersion: 2
       rgba: 4282006074
