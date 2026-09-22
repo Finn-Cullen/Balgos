@@ -36,8 +36,9 @@ public struct InitGridJob : IJobParallelFor
         }
 
         mat_vals m = medium_val;
+        float f = NodeArr[index].decibels;
         m.minDecibelVal = MinVal;
-        m.decibels = MinVal;
+        m.decibels = f;
         NodeArr[index] = m;
         // assigns mat vals
 
