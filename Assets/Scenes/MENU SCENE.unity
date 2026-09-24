@@ -436,7 +436,7 @@ MonoBehaviour:
   ACTSTR: StopAllSources
   Conn: {fileID: 1360949439}
   interval: 0.05
-  threshold: 50
+  threshold: 90
   activated: 0
 --- !u!4 &1150406880
 Transform:
@@ -692,6 +692,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1401576274}
+  - component: {fileID: 1401576275}
   m_Layer: 0
   m_Name: START
   m_TagString: Untagged
@@ -716,6 +717,22 @@ Transform:
   - {fileID: 1150406880}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1401576275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401576273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6e39b612fae764295229d840c83a78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickNoise: 110
+  idleNoise: 20
+  moveNoise: 80
+  interval: 2
 --- !u!1001 &1139781883652476696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -737,6 +754,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1465331111820849210, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: air.decay
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465331111820849210, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: air.spreadPerc
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465331111820849210, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: air.maxDecibelVal
       value: 200
       objectReference: {fileID: 0}
@@ -752,6 +777,10 @@ PrefabInstance:
       propertyPath: grid.gradientHeight
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 1471523821899399242, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1877128420125765769, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: m_TileAssetArray.Array.data[1].m_Data
       value: 
@@ -761,36 +790,60 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 185232520}
     - target: {fileID: 2173843989398225978, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2173843989398225978, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2173843989398225978, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2173843989398225978, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2702487433597505412, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3014897248401269991, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014897248401269991, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014897248401269991, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3014897248401269991, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3225684245942242740, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: m_Name
       value: menu
       objectReference: {fileID: 0}
     - target: {fileID: 3459103085478610648, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459103085478610648, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459103085478610648, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3459103085478610648, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3543962673731765940, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -885,28 +938,52 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 733449760}
     - target: {fileID: 6508982745387542447, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508982745387542447, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508982745387542447, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6508982745387542447, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202794560122335669, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202794560122335669, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7202794560122335669, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7202794560122335669, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302789384897862405, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.decay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302789384897862405, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
+      propertyPath: medium_val.spreadPerc
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8302789384897862405, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8302789384897862405, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.minDecibelVal
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8540475273978209445, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal
