@@ -25,6 +25,8 @@ public struct noise_grid{
     public float gradientWidth;
     public float gradientHeight;
 
+    public bool active;
+
     public void construct_grid(mat_vals air, float res){
         // produces new grid
         
@@ -95,15 +97,16 @@ public struct noise_grid{
         activeNodes = setNodes;
         a.Dispose();
         stream.Dispose();
-
     }
 
     public void editnodeval(int pos, float val){
         //decibels[pos] = val;
-        mat_vals temp = Nodes[pos];
-        temp.decibels = val;
-        Nodes[pos] = temp;
-        activeNodes.Add(pos);
+        if(!active){
+            mat_vals temp = Nodes[pos];
+            temp.decibels = val;
+            Nodes[pos] = temp;
+            activeNodes.Add(pos);
+        }
     }
 
     public int pos_to_ind(Vector2 pos){

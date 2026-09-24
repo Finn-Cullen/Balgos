@@ -31,6 +31,7 @@ public class gameStateManager : MonoBehaviour
         noiser[] n = FindObjectsByType<noiser>(FindObjectsSortMode.None);
         SoundSwitch[] s = FindObjectsByType<SoundSwitch>(FindObjectsSortMode.None);
         BALGOS[] b = FindObjectsByType<BALGOS>(FindObjectsSortMode.None);
+        mesh.grid.active = true;
 
         foreach(act_updater A in a){A.enabled = false;}
         foreach(noiser N in n){N.enabled = false;}
