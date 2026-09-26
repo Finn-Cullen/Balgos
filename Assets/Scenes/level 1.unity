@@ -707,7 +707,7 @@ GameObject:
   - component: {fileID: 1652040886}
   - component: {fileID: 1652040885}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: NAVIGATOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1914,7 +1914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2910580766521806447, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3014897248401269991, guid: 9d3cff9c6281aa24a824501f5092f96f, type: 3}
       propertyPath: medium_val.maxDecibelVal

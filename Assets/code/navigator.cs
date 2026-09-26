@@ -13,19 +13,40 @@ public class navigator : MonoBehaviour
     public Transform tarPos;
     mesh_manager mesh;
 
+    void Start(){
+        mesh = FindObjectsByType<mesh_manager>(FindObjectsSortMode.None)[0];
+    }
+
     void Update(){
         if(nav){
             nav = !nav;
-            mesh = FindObjectsByType<mesh_manager>(FindObjectsSortMode.None)[0];
-            int2 desDir = new int2(-1,-1);
-            if(transform.position.x < tarPos.position.x){
-                desDir.x = 1;
-            }
-            if(transform.position.y < tarPos.position.y){
-                desDir.y = 1;
-            }
-            int a = searchProng(desDir);
-            Debug.Log(desDir);
+            Navigate();
+        }
+    }
+
+    public void Navigate(){
+        // order of conduct
+        // establish init perameters for search
+        // generate positions
+        //      generate prongs at position
+        //      discover most legitimate prong
+        //      edit prong pos to be better (in line with center of room / tarpos)
+        generatePositions();
+    }
+
+    public void generatePositions(){
+        // returns 1 new position every time called
+        int2 desDir = new int2(-1,-1);
+        if(transform.position.x < tarPos.position.x){
+            desDir.x = 1;
+        }
+        if(transform.position.y < tarPos.position.y){
+            desDir.y = 1;
+        }
+        int2[] dirs = {new int2(1,0),new int2(-1,0),new int2(0,1),new int2(0,-1),desDir};
+        foreach(int2 d in dirs){
+            int pos = searchProng(d);
+            Debug.Log(mesh.grid.worldPositions[pos]);
         }
     }
 
@@ -39,7 +60,6 @@ public class navigator : MonoBehaviour
             breakOUT++;
             searchPos += 5*(dir.x * 1);
             searchPos += 5*(dir.y * tot);
-            Debug.Log(mesh.grid.worldPositions[searchPos]);
             if(mesh.grid.Nodes[searchPos].spreadRate > 3){
                 // breaks loop and adds position of colision to list
                 searchConclude = false;
