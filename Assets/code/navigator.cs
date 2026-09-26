@@ -30,9 +30,15 @@ public class navigator : MonoBehaviour
 
     public void Navigate(){
         bool goal = false;
-        while(!goal){
+        int MaxLoop = 0;
+        while(!goal && MaxLoop < 30){
             // checks list so far, removes redundant moves, checks if goal is reached
             goal = checkList();
+            // produces set of 5 positions at walls
+
+            // culls positions and finds most likely to navigate toward player
+
+            // edits position to be in line with player/toward center of room
         }
     }
 
@@ -42,40 +48,48 @@ public class navigator : MonoBehaviour
         if(posList.Count > 1){
             // does the check
             for(int i = 1; i < posList.Count; i++){
-                float2 PosA = posList[i];
-                float2 PosB = posList[i-1];
-                bool checkPath = PosA.x < tarPos.position.x && PosB.x > tarPos.position.x;
-                checkPath = checkPath || (PosA.x > tarPos.position.x && PosB.x < tarPos.position.x);
-                float chVar = Mathf.Abs(PosA.y-tarPos.position.y);
-                if(Mathf.Abs(PosA.x-PosB.x) < 0.5f){
-                    checkPath = PosA.y < tarPos.position.y && PosB.y > tarPos.position.y;
-                    checkPath = checkPath || (PosA.y > tarPos.position.y && PosB.y < tarPos.position.y);
-                    chVar = Mathf.Abs(PosA.x-tarPos.position.x);
-                }
-                // checkPath checks if the target position lies between the nodes
-                // chVar is the distance from the travel directio of the nodes and the target pos
-                if(chVar < targetRad && checkPath){
-                    Debug.Log("correct");
-                    ch = true;
-                }
-                if(i > 1){
-                    // from the third node onward we check for double backs
-                    float2 PosC = posList[i-2];
-                    string AtoB = "across";
-                    string BtoC = "across";
-                    if(Mathf.Abs(PosA.x-PosB.x) < 0.5f){AtoB = "above";}
-                    if(Mathf.Abs(PosB.x-PosC.x) < 0.5f){BtoC = "above";}
-                    if(AtoB == BtoC){
-                        // checks if the nodes double back (I.E same direction is used twice in succession) and handles it
-                        Debug.Log("removed double back");
-                        posList.RemoveAt(i-1);
-                        i--;
+                if(!ch){
+                    float2 PosA = posList[i];
+                    float2 PosB = posList[i-1];
+                    bool checkPath = PosA.x < tarPos.position.x && PosB.x > tarPos.position.x;
+                    checkPath = checkPath || (PosA.x > tarPos.position.x && PosB.x < tarPos.position.x);
+                    float chVar = Mathf.Abs(PosA.y-tarPos.position.y);
+                    if(Mathf.Abs(PosA.x-PosB.x) < 0.5f){
+                        checkPath = PosA.y < tarPos.position.y && PosB.y > tarPos.position.y;
+                        checkPath = checkPath || (PosA.y > tarPos.position.y && PosB.y < tarPos.position.y);
+                        chVar = Mathf.Abs(PosA.x-tarPos.position.x);
                     }
+                    // checkPath checks if the target position lies between the nodes
+                    // chVar is the distance from the travel directio of the nodes and the target pos
+                    if(chVar < targetRad && checkPath){
+                        Debug.Log("terminal position found");
+                        ch = true;
+                    }
+                    if(i > 1){
+                        // from the third node onward we check for double backs
+                        float2 PosC = posList[i-2];
+                        string AtoB = "across";
+                        string BtoC = "across";
+                        if(Mathf.Abs(PosA.x-PosB.x) < 0.5f){AtoB = "above";}
+                        if(Mathf.Abs(PosB.x-PosC.x) < 0.5f){BtoC = "above";}
+                        if(AtoB == BtoC){
+                            // checks if the nodes double back (I.E same direction is used twice in succession) and handles it
+                            Debug.Log("removed double back");
+                            posList.RemoveAt(i-1);
+                            i--;
+                        }
+                    }
+                }
+                else{
+                    posList.RemoveAt(i);
+                    i--;
+                    // if terminal node is found, remove all nodes after it
                 }
             }
         }
         else{
             posList.Add((Vector2)transform.position);
+            // first position should be navigator's position
         }
         return ch;
     }
